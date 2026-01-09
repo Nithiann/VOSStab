@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "VOSStab - New Tab",
+  "version": "1.0",
+  "description": "Expressive Material You New Tab",
+  "permissions": ["bookmarks", "storage", "topSites"],
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "action": {
+    "default_title": "Open New Tab"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "vosstab@voss.dev",
+      "strict_min_version": "100.0"
+    }
+  }
+}
