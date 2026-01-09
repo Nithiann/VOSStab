@@ -24,10 +24,10 @@ const updateTheme = (mode) => {
 };
 
 const updateColor = (color) => {
-  document.documentElement.style.setProperty('--primary-color', color);
-  document.documentElement.style.setProperty('--primary-color-alpha', `${color}33`);
+  document.body.style.setProperty('--primary-color', color);
+  document.body.style.setProperty('--primary-color-alpha', `${color}33`);
   // Add some tonal variations
-  document.documentElement.style.setProperty('--primary-container', `${color}1A`); // 10% opacity
+  document.body.style.setProperty('--primary-container', `${color}1A`); // 10% opacity
 };
 
 // System theme listener
