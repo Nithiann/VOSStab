@@ -23,11 +23,27 @@ const updateTheme = (mode) => {
   }
 };
 
+const hexToRgb = (hex) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+};
+
 const updateColor = (color) => {
   document.body.style.setProperty('--primary-color', color);
   document.body.style.setProperty('--primary-color-alpha', `${color}33`);
   // Add some tonal variations
   document.body.style.setProperty('--primary-container', `${color}1A`); // 10% opacity
+  
+  const rgb = hexToRgb(color);
+  if (rgb) {
+    const rgbString = `${rgb.r}, ${rgb.g}, ${rgb.b}`;
+    document.body.style.setProperty('--primary-rgb', rgbString);
+    document.body.style.setProperty('--glass-shadow', `0 8px 32px 0 rgba(${rgbString}, 0.37)`);
+  }
 };
 
 // System theme listener

@@ -101,7 +101,7 @@ const selectEngine = (engine) => {
 }
 
 .glass-bar:focus-within {
-  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 12px 40px rgba(var(--primary-rgb), 0.5);
   transform: translateY(-2px);
   border-color: var(--primary-color);
 }
