@@ -27,7 +27,7 @@ jobs:
       - name: Update Manifest
         run: |
           # Update version to 1.0.<run_number> and set ID
-          jq '.version = "1.0.${{ github.run_number }}" | .browser_specific_settings.gecko.id = "171eaa48b8884ad68ec1"' public/manifest.json > public/manifest.json.tmp && mv public/manifest.json.tmp public/manifest.json
+          jq '.version = "1.0.${{ github.run_number }}" | .browser_specific_settings.gecko.id = "vosstab@voss.dev"' public/manifest.json > public/manifest.json.tmp && mv public/manifest.json.tmp public/manifest.json
 
       - name: Build
         run: npm run build
