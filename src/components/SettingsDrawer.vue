@@ -169,7 +169,7 @@ const selectColor = (color) => {
 .theme-options {
   display: flex;
   gap: 15px;
-  background: var(--glass-bg);
+  background: var(--surface-color);
   padding: 10px;
   border-radius: 12px;
 }
