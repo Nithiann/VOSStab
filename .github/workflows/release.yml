@@ -24,15 +24,22 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Update Manifest
+        run: |
+          # Update version to 1.0.<run_number> and set ID
+          jq '.version = "1.0.${{ github.run_number }}" | .browser_specific_settings.gecko.id = "171eaa48b8884ad68ec1"' public/manifest.json > public/manifest.json.tmp && mv public/manifest.json.tmp public/manifest.json
+
       - name: Build
         run: npm run build
 
-      - name: Package Extension
+      - name: Sign Extension
         run: |
-          # Create zip/xpi from dist directory
-          cd dist
-          zip -r ../vosstab-firefox.xpi ./*
-          cd ..
+          npx web-ext sign \
+            --source-dir dist \
+            --channel=unlisted \
+            --api-key ${{ secrets.JWT_ISSUER }} \
+            --api-secret ${{ secrets.JWT_SECRET }} \
+            --artifacts-dir web-ext-artifacts
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -40,5 +47,6 @@ jobs:
           tag_name: v0.0.${{ github.run_number }}
           name: Release v0.0.${{ github.run_number }}
           files: |
-            vosstab-firefox.xpi
+            web-ext-artifacts/*.xpi
+
           generate_release_notes: true
