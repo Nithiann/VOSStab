@@ -2,10 +2,11 @@
 import { ref, watch, onMounted } from 'vue';
 
 const props = defineProps(['isOpen']);
-const emit = defineEmits(['close', 'update:theme', 'update:color']);
+const emit = defineEmits(['close', 'update:theme', 'update:color', 'update:timeFormat']);
 
 const primaryColor = ref('#6200ee');
 const selectedThemeMode = ref('system');
+const selectedTimeFormat = ref('24h');
 
 const colors = [
   '#6200ee', '#3700b3', '#03dac6', '#018786',
@@ -21,6 +22,8 @@ onMounted(() => {
   
   if (savedColor) primaryColor.value = savedColor;
   if (savedTheme) selectedThemeMode.value = savedTheme;
+  const savedTimeFormat = localStorage.getItem('time-format');
+  if (savedTimeFormat) selectedTimeFormat.value = savedTimeFormat;
 });
 
 watch(primaryColor, (newColor) => {
@@ -31,6 +34,11 @@ watch(primaryColor, (newColor) => {
 watch(selectedThemeMode, (newMode) => {
   emit('update:theme', newMode);
   localStorage.setItem('theme-mode', newMode);
+});
+
+watch(selectedTimeFormat, (newFormat) => {
+  emit('update:timeFormat', newFormat);
+  localStorage.setItem('time-format', newFormat);
 });
 
 const selectColor = (color) => {
@@ -62,6 +70,20 @@ const selectColor = (color) => {
         <label class="theme-option">
           <input type="radio" value="system" v-model="selectedThemeMode">
           <span class="option-label">System</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Time Format</h3>
+      <div class="theme-options">
+        <label class="theme-option">
+          <input type="radio" value="12h" v-model="selectedTimeFormat">
+          <span class="option-label">12h</span>
+        </label>
+        <label class="theme-option">
+          <input type="radio" value="24h" v-model="selectedTimeFormat">
+          <span class="option-label">24h</span>
         </label>
       </div>
     </div>

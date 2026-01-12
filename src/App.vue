@@ -3,8 +3,10 @@ import { ref, onMounted } from 'vue';
 import SettingsDrawer from './components/SettingsDrawer.vue';
 import SearchComponent from './components/SearchComponent.vue';
 import BookmarksComponent from './components/BookmarksComponent.vue';
+import TimeDisplay from './components/TimeDisplay.vue';
 
 const isSettingsOpen = ref(false);
+const currentTimeFormat = ref('24h');
 
 const applyTheme = (theme) => {
   if (theme === 'dark') {
@@ -57,9 +59,11 @@ const onSystemThemeChange = (e) => {
 onMounted(() => {
   const savedColor = localStorage.getItem('primary-color');
   const savedThemeMode = localStorage.getItem('theme-mode') || 'system';
+  const savedTimeFormat = localStorage.getItem('time-format') || '24h';
   
   if (savedColor) updateColor(savedColor);
   updateTheme(savedThemeMode);
+  currentTimeFormat.value = savedTimeFormat;
   
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', onSystemThemeChange);
 });
@@ -78,9 +82,11 @@ onMounted(() => {
       @close="isSettingsOpen = false"
       @update:theme="updateTheme"
       @update:color="updateColor"
+      @update:timeFormat="format => currentTimeFormat = format"
     />
 
     <main class="main-content">
+      <TimeDisplay :timeFormat="currentTimeFormat" />
       <SearchComponent />
       <BookmarksComponent />
     </main>
