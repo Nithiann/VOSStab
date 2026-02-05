@@ -4,8 +4,11 @@ import SettingsDrawer from './components/SettingsDrawer.vue';
 import SearchComponent from './components/SearchComponent.vue';
 import BookmarksComponent from './components/BookmarksComponent.vue';
 import TimeDisplay from './components/TimeDisplay.vue';
+import TaskManager from './components/TaskManager.vue';
 
 const isSettingsOpen = ref(false);
+const isTaskManagerOpen = ref(false);
+const showTaskManager = ref(true);
 const currentTimeFormat = ref('24h');
 
 const applyTheme = (theme) => {
@@ -65,6 +68,9 @@ onMounted(() => {
   updateTheme(savedThemeMode);
   currentTimeFormat.value = savedTimeFormat;
   
+  const savedShowTasks = localStorage.getItem('show-task-manager');
+  if (savedShowTasks !== null) showTaskManager.value = savedShowTasks === 'true';
+  
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', onSystemThemeChange);
 });
 </script>
@@ -83,7 +89,14 @@ onMounted(() => {
       @update:theme="updateTheme"
       @update:color="updateColor"
       @update:timeFormat="format => currentTimeFormat = format"
+      @update:showTaskManager="val => showTaskManager = val"
     />
+
+    <button v-if="showTaskManager" class="tasks-toggle" @click="isTaskManagerOpen = !isTaskManagerOpen" :class="{ active: isTaskManagerOpen }">
+      <i class="fas fa-tasks"></i>
+    </button>
+
+    <TaskManager :isOpen="isTaskManagerOpen" @close="isTaskManagerOpen = false" />
 
     <main class="main-content">
       <TimeDisplay :timeFormat="currentTimeFormat" />
@@ -149,5 +162,24 @@ onMounted(() => {
 .icon {
   width: 24px;
   height: 24px;
+}
+
+.tasks-toggle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  color: var(--on-background);
+  font-size: 1.2rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: all 0.3s;
+  z-index: 10;
+}
+
+.tasks-toggle:hover, .tasks-toggle.active {
+  opacity: 1;
+  color: var(--primary-color);
 }
 </style>
